@@ -1,0 +1,29 @@
+# Environment variables & secrets (CRITICAL)
+.env
+backend/.env
+*.env
+
+# Python / Flask
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+backend/hospital_pos.db
+backend/hospital_pos.db*
+
+# Node / React
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Backups & Temp
+backups/
+*.zip
+*.tar.gz
+.DS_Store
+Thumbs.db
