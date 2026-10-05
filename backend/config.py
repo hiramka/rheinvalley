@@ -17,9 +17,14 @@ class BaseConfig:
 
     @staticmethod
     def format_database_url(url):
-        if url and url.startswith("postgres://"):
-            return url.replace("postgres://", "postgresql://", 1)
+        if not url:
+            return url
+        if url.startswith("postgres://"):
+            return url.replace("postgres://", "postgresql+psycopg2://", 1)
+        if url.startswith("postgresql://") and not url.startswith("postgresql+"):
+            return url.replace("postgresql://", "postgresql+psycopg2://", 1)
         return url
+
 
 
 class DevelopmentConfig(BaseConfig):
