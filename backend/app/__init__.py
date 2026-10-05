@@ -1,10 +1,30 @@
 import os
+import sys
+
+# Ensure backend directory is in sys.path
+backend_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if backend_path not in sys.path:
+    sys.path.insert(0, backend_path)
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
-from config import Config
-from app.models import db
-from app.middleware import apply_security_headers
+
+try:
+    from config import Config
+except ImportError:
+    from backend.config import Config
+
+try:
+    from app.models import db
+except ImportError:
+    from backend.app.models import db
+
+try:
+    from app.middleware import apply_security_headers
+except ImportError:
+    from backend.app.middleware import apply_security_headers
+
 
 migrate = Migrate()
 

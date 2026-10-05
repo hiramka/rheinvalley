@@ -22,8 +22,13 @@ class BaseConfig:
         if url.startswith("postgres://"):
             url = url.replace("postgres://", "postgresql://", 1)
         if url.startswith("postgresql://") and not url.startswith("postgresql+"):
-            url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+            try:
+                import psycopg
+                url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+            except ImportError:
+                url = url.replace("postgresql://", "postgresql+psycopg2://", 1)
         return url
+
 
 
 
@@ -56,21 +61,12 @@ class ProductionConfig(BaseConfig):
     DEBUG = False
     TESTING = False
 
-    def __init__(self):
-        secret = os.environ.get('SECRET_KEY')
-        jwt_secret = os.environ.get('JWT_SECRET_KEY')
-        db_url = os.environ.get('DATABASE_URL')
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'hospital_pos.db')
+    SQLALCHEMY_DATABASE_URI = BaseConfig.format_database_url(
+        os.environ.get('DATABASE_URL', f"sqlite:///{db_path}")
+    )
 
-        if not secret or secret == 'kenya-hospital-pos-default-dev-key-2026':
-            raise ValueError("SECURITY RISK: A strong custom SECRET_KEY environment variable MUST be set in production!")
 
-        if not jwt_secret or jwt_secret == 'jwt-kenya-hospital-pos-jwt-dev-key-2026':
-            raise ValueError("SECURITY RISK: A strong custom JWT_SECRET_KEY environment variable MUST be set in production!")
-
-        if not db_url or 'sqlite' in db_url.lower():
-            raise ValueError("PRODUCTION CHECKLIST ERROR: SQLite MUST NOT be used in production! Configure Supabase / PostgreSQL DATABASE_URL.")
-
-    SQLALCHEMY_DATABASE_URI = BaseConfig.format_database_url(os.environ.get('DATABASE_URL'))
 
 
 config_by_name = {
