@@ -36,6 +36,14 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # Ensure tables exist on boot
+    with app.app_context():
+        try:
+            db.create_all()
+        except Exception as e:
+            app.logger.warning(f"Auto db.create_all warning: {e}")
+
+
     # Configure CORS origins from environment or allow default
     cors_origins = os.environ.get('CORS_ALLOWED_ORIGINS', '*').split(',')
     CORS(app, resources={r"/api/*": {"origins": cors_origins}})

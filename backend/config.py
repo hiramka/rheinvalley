@@ -12,6 +12,10 @@ class BaseConfig:
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_recycle": 300,
+    }
     RATELIMIT_STORAGE_URI = os.environ.get('REDIS_URL', 'memory://')
     RATELIMIT_DEFAULT = "200 per day; 50 per hour"
 
@@ -20,14 +24,11 @@ class BaseConfig:
         if not url:
             return url
         if url.startswith("postgres://"):
-            url = url.replace("postgres://", "postgresql://", 1)
+            return url.replace("postgres://", "postgresql+psycopg2://", 1)
         if url.startswith("postgresql://") and not url.startswith("postgresql+"):
-            try:
-                import psycopg
-                url = url.replace("postgresql://", "postgresql+psycopg://", 1)
-            except ImportError:
-                url = url.replace("postgresql://", "postgresql+psycopg2://", 1)
+            return url.replace("postgresql://", "postgresql+psycopg2://", 1)
         return url
+
 
 
 
