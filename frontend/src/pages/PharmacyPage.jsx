@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Pill, AlertTriangle, Clock, PlusCircle, ShoppingCart, Search, History, ArrowUpRight, ArrowDownLeft, ShieldAlert, CheckCircle } from 'lucide-react';
 import { api } from '../api';
+import Spinner from '../components/Spinner';
+
 
 export default function PharmacyPage({ user, defaultVisitId }) {
   const [inventory, setInventory] = useState([]);
@@ -163,8 +165,13 @@ export default function PharmacyPage({ user, defaultVisitId }) {
     }
   };
 
+  if (loading) {
+    return <Spinner text="Loading FEFO pharmacy inventory & stock batches..." />;
+  }
+
   return (
     <div>
+
       {/* Top Header Card */}
       <div className="card" style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

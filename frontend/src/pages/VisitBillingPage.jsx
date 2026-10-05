@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Stethoscope, Plus, FileText, DollarSign, UserCheck, Calendar, Activity, CheckCircle, PlusCircle, Printer } from 'lucide-react';
 import { api } from '../api';
 import ReceiptModal from '../components/ReceiptModal';
+import Spinner from '../components/Spinner';
+
 
 export default function VisitBillingPage({ user, preselectedPatient, onGoToBilling, onGoToPharmacy }) {
   const [visits, setVisits] = useState([]);
@@ -135,8 +137,13 @@ export default function VisitBillingPage({ user, preselectedPatient, onGoToBilli
     }
   };
 
+  if (loading) {
+    return <Spinner text="Loading outpatient consultation visits & patient records..." />;
+  }
+
   return (
     <div>
+
       {/* Top Header Card */}
       <div className="card" style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

@@ -7,6 +7,7 @@ import VisitBillingPage from './pages/VisitBillingPage';
 import PharmacyPage from './pages/PharmacyPage';
 import BillingPaymentPage from './pages/BillingPaymentPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import Spinner from './components/Spinner';
 import { api } from './api';
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
     return saved ? JSON.parse(saved) : null;
   });
 
+  const [initializing, setInitializing] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [alerts, setAlerts] = useState(null);
   const [search, setSearch] = useState('');
@@ -22,6 +24,15 @@ export default function App() {
   // Inter-tab cross navigation state
   const [preselectedPatient, setPreselectedPatient] = useState(null);
   const [targetVisitId, setTargetVisitId] = useState(null);
+
+  useEffect(() => {
+    // Quick startup initialization check
+    const timer = setTimeout(() => {
+      setInitializing(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
 
   useEffect(() => {
     if (user) {
@@ -70,9 +81,14 @@ export default function App() {
     setActiveTab('billing');
   };
 
+  if (initializing) {
+    return <Spinner fullScreen text="Initializing CityCare Hospital POS & Billing System..." />;
+  }
+
   if (!user) {
     return <LoginPage onLoginSuccess={handleLoginSuccess} />;
   }
+
 
   const tabTitles = {
     dashboard: 'Admin Executive Dashboard',

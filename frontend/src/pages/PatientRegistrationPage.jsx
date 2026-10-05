@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Users, UserPlus, Search, Calendar, Phone, IdCard, HeartHandshake, Eye, PlusCircle, CheckCircle, AlertCircle } from 'lucide-react';
 import { api } from '../api';
+import Spinner from '../components/Spinner';
+
 
 export default function PatientRegistrationPage({ user, onStartVisit }) {
   const [patients, setPatients] = useState([]);
@@ -224,7 +226,7 @@ export default function PatientRegistrationPage({ user, onStartVisit }) {
                 Cancel
               </button>
               <button type="submit" className="btn btn-primary" disabled={formLoading}>
-                {formLoading ? 'Saving...' : 'Complete Registration'}
+                {formLoading ? <Spinner inline size={16} text="Saving..." /> : 'Complete Registration'}
               </button>
             </div>
           </form>
@@ -252,8 +254,9 @@ export default function PatientRegistrationPage({ user, onStartVisit }) {
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '40px' }}>Loading patient registry...</div>
+          <Spinner text="Loading patient records..." />
         ) : patients.length === 0 ? (
+
           <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
             No patient records found. {search ? 'Try clearing your search query.' : 'Click "Register New Patient" to add one.'}
           </div>

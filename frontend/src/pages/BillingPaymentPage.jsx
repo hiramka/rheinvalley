@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { CreditCard, Printer, CheckCircle, Clock, DollarSign, Smartphone, ShieldCheck, AlertCircle } from 'lucide-react';
 import { api } from '../api';
 import ReceiptModal from '../components/ReceiptModal';
+import Spinner from '../components/Spinner';
 
 export default function BillingPaymentPage({ user, defaultVisitId }) {
+
   const [bills, setBills] = useState([]);
   const [statusFilter, setStatusFilter] = useState('');
   const [selectedBill, setSelectedBill] = useState(null);
@@ -89,8 +91,13 @@ export default function BillingPaymentPage({ user, defaultVisitId }) {
     }
   };
 
+  if (loading) {
+    return <Spinner text="Loading hospital billing & payment settlements..." />;
+  }
+
   return (
     <div>
+
       {/* Top Header */}
       <div className="card" style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

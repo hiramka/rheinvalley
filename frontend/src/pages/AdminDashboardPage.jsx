@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LayoutDashboard, Users, Calendar, DollarSign, Pill, ShieldCheck, UserPlus, Search, AlertTriangle, Key, BadgeCheck } from 'lucide-react';
 import { api } from '../api';
+import Spinner from '../components/Spinner';
 
 export default function AdminDashboardPage({ user }) {
   const [metrics, setMetrics] = useState(null);
@@ -8,6 +9,7 @@ export default function AdminDashboardPage({ user }) {
   const [usersList, setUsersList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showUserModal, setShowUserModal] = useState(false);
+
 
   // User & Staff Form State
   const [userForm, setUserForm] = useState({
@@ -72,8 +74,14 @@ export default function AdminDashboardPage({ user }) {
     }
   };
 
+  if (loading) {
+    return <Spinner text="Loading Executive Dashboard & System Analytics..." />;
+  }
+
   return (
+
     <div>
+
       {/* Top Banner */}
       <div className="card" style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

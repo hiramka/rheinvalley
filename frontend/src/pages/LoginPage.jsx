@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Activity, Lock, User, KeyRound, ShieldAlert, UserPlus, LogIn, BadgeCheck } from 'lucide-react';
 import { api } from '../api';
+import Spinner from '../components/Spinner';
 
 export default function LoginPage({ onLoginSuccess }) {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -155,10 +156,10 @@ export default function LoginPage({ onLoginSuccess }) {
             <button
               type="submit"
               className="btn btn-primary"
-              style={{ width: '100%', padding: '12px', fontSize: '15px' }}
+              style={{ width: '100%', padding: '12px', fontSize: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               disabled={loading}
             >
-              {loading ? 'Authenticating...' : 'Sign In to Dashboard'}
+              {loading ? <Spinner inline size={16} text="Authenticating..." /> : 'Sign In to Dashboard'}
             </button>
           </form>
         ) : (
@@ -232,12 +233,13 @@ export default function LoginPage({ onLoginSuccess }) {
             <button
               type="submit"
               className="btn btn-primary"
-              style={{ width: '100%', padding: '12px', fontSize: '15px' }}
+              style={{ width: '100%', padding: '12px', fontSize: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               disabled={loading}
             >
-              {loading ? 'Creating Staff Account...' : 'Register Staff Account'}
+              {loading ? <Spinner inline size={16} text="Creating Staff Account..." /> : 'Register Staff Account'}
             </button>
           </form>
+
         )}
 
         <div className="demo-buttons" style={{ marginTop: '20px' }}>
