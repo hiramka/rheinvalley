@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000/api';
+let rawBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000/api').trim().replace(/\/+$/, '');
+const API_BASE_URL = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl}/api`;
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
@@ -29,12 +30,13 @@ const safeFetch = async (url, options = {}) => {
   } catch (err) {
     if (err.name === 'TypeError' || err.message?.toLowerCase().includes('fetch')) {
       throw new Error(
-        `Unable to reach backend API at ${API_BASE_URL}. If on Vercel, check VITE_API_BASE_URL environment variable. If running locally, start the backend server.`
+        `Unable to reach backend API at ${API_BASE_URL}. Render free instances may take 30 seconds to wake up on first visit. Please wait a moment and try again.`
       );
     }
     throw err;
   }
 };
+
 
 export const api = {
   // Auth
